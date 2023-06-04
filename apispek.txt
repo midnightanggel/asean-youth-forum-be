@@ -1,0 +1,53 @@
+METHOD : POST
+
+localhost:9000/api/auth/login
+BODY:
+{
+    email:"",
+    password:""
+}
+RESPONSE:
+{
+    status:"success",
+    token:"",
+    user:{
+        id:"",
+        name:""
+    }
+}
+
+{
+    status:"failed",
+}
+
+
+
+
+
+localhost:9000/api/auth/register
+BODY:
+{
+    name:"".
+    age:"",
+    country:"",
+    email:"",
+    password:"",
+    confirmPassword:""
+}
+
+RESPONSE
+{
+    status:"success",
+    user:{
+         name:"".
+    age:"",
+    country:"",
+    email:"",
+    password:"",
+    confirmPassword:""
+    }
+}
+
+{
+    status:"failed",
+}

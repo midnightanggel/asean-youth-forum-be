@@ -1,0 +1,169 @@
+Endpoint : /api/articles
+method : POST 
+header : Authorization Token
+body : {
+    title: String
+    content: String
+    img: String
+    date: Default(Date)
+    like: Default([])
+    disLike: Default([])
+    comments: Default([])
+}
+
+Response : 
+1. Success
+{
+    status: "sucess",
+    data:{
+    title: String
+    content: String
+    img: String
+    date: Default(Date)
+    like: Default([])
+    disLike: Default([])
+    comments: Default([])
+    }
+}
+
+2. failed
+{
+    status: "failed",
+    message : "Failed to create article"
+}
+
+
+Endpoint : /api/articles
+method : GET 
+header : Authorization Token
+body : {
+    title: String
+    content: String
+    img: String
+    date: Default(Date)
+    like: Default([])
+    disLike: Default([])
+    comments: Default([])
+}
+
+Response : 
+1. Success
+{
+    status: "sucess",
+    data:[
+        {
+    title: String
+    content: String
+    img: String
+    date: Default(Date)
+    like: Default([])
+    disLike: Default([])
+    comments: Default([])
+    },{
+    title: String
+    content: String
+    img: String
+    date: Default(Date)
+    like: Default([])
+    disLike: Default([])
+    comments: Default([])
+    }
+    ]
+}
+
+2. failed
+{
+    status: "failed",
+    message : "Failed to get articles"
+}
+
+
+Endpoint : /api/articles/id
+method : GET (by id)
+header : Authorization Token
+params : id:number
+
+Response : 
+1. Success
+{
+    status: "sucess",
+    data:{
+    title: String
+    content: String
+    img: String
+    date: Default(Date)
+    like: Default([])
+    disLike: Default([])
+    comments: Default([])
+    }
+}
+
+2. failed
+{
+    status: "failed",
+    message : "Failed to get article"
+}
+
+Endpoint : /api/articles/id
+method : DELETE (by id)
+header : Authorization Token
+params : id:number
+
+Response : 
+1. Success
+{
+    status: "sucess",
+    data:{
+    title: String
+    content: String
+    img: String
+    date: Default(Date)
+    like: Default([])
+    disLike: Default([])
+    comments: Default([])
+    }
+}
+
+2. failed
+{
+    status: "failed",
+    message : "Failed to delete article"
+}
+
+Endpoint : /api/articles/id
+method : PUT (by id)
+header : Authorization Token
+params : id:number
+body  : {
+    {
+    title: String
+    content: String
+    img: String
+    date: (Date)
+    like: ([])
+    disLike: ([])
+    comments: ([])
+    }
+}
+*sesuaikan dengan banyak object yang di update, jika hanya 1 yang berubah maka masukan property yang dirubah saja
+
+Response : 
+1. Success
+{
+    status: "sucess",
+    data:{
+    title: String
+    content: String
+    img: String
+    date: Default(Date)
+    like: Default([])
+    disLike: Default([])
+    comments: Default([])
+    }
+}
+
+2. failed
+{
+    status: "failed",
+    message : "Failed to update article"
+}
