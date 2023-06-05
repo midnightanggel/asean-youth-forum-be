@@ -13,7 +13,7 @@ const articleSchema = new mongoose.Schema({
     },
     image:{
         type: String,
-
+        required: [true, "please add images"]
     },
     date:{
         type: Date,
@@ -34,4 +34,4 @@ const articleSchema = new mongoose.Schema({
     },
 });
 
-export default mongoose.model("article", articleSchema);
+export default mongoose.model("articles", articleSchema);
