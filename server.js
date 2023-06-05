@@ -13,8 +13,8 @@ app.use(cors());
 app.use(express.json());
 connectDB();
 
-app.use("/users", users);
-app.use("/articles",auth, articles);
+app.use("/api/auth", users);
+app.use("/api/articles",auth, articles);
 app.get("/", (req, res) => res.send("Hello world"));
 app.all("*", (req, res) =>
   res.send("Sorry, the route you are going to does not exist")
