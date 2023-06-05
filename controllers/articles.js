@@ -1,5 +1,6 @@
 import article from "../models/articles.js";
 
+// handle createarticle
 export const createarticles = async (req, res) => {
     try {
 

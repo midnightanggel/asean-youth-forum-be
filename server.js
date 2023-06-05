@@ -16,7 +16,7 @@ app.use(express.json());
 connectDB();
 
 app.use("/users", users);
-app.use("/article", article);
+app.use(article);
 app.get("/", (req, res) => res.send("Hello world"));
 app.all("*", (req, res) =>
   res.send("Sorry, the route you are going to does not exist")
