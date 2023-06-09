@@ -3,12 +3,50 @@ import Users from "../models/users.js";
 
 export const register = async (req, res) => {
   try {
+    const {name, age, country, email} = req.body;
+        if (!name){
+          return res.status(400).json({
+            status : "failed",
+            message : "please insert name"
+          });
+        }
+        if (!age){
+          return res.status(400).json({
+            status : "failed",
+            message : "please insert age"
+          })
+        }
+        if (!country){
+          return res.status(400).json({
+            status : "failed",
+            message : "please insert country"
+          })
+        }
+        if (!email){
+          return res.status(400).json({
+            status : "failed",
+            message : "please insert email"
+          })
+        }
+    let isMatch = await Users.findOne({ email: email }).exec();
+        if (isMatch){
+          return res.status(400).json({
+            status:"failed",
+            message: "email already exist, please login",
+        });
+        }
     const { password, confirmPassword} = req.body;
         if (password !== confirmPassword) {
             return res.status(400).json({
                 status:"failed",
                 message: "password not match",
-        });
+            });
+        }
+        if (!password || !confirmPassword){
+          return res.status(400).json({
+            status : "failed",
+            message : "please insert password or confirmation password"
+          })
         }
     const user = await Users.create(
         {
@@ -44,14 +82,14 @@ export const login = async (req, res, next) => {
 
     if (!user) {
       return res.status(401).json({
-        message: "Invalid credential",
+        message: "Wrong email or password",
       });
     }
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
       return res.status(401).json({
-        message: "Invalid credential",
+        message: "Wrong email or password",
       });
     }
 
