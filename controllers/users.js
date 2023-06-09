@@ -36,17 +36,17 @@ export const register = async (req, res) => {
         });
         }
     const { password, confirmPassword} = req.body;
-        if (password !== confirmPassword) {
-            return res.status(400).json({
-                status:"failed",
-                message: "password not match",
-            });
-        }
         if (!password || !confirmPassword){
           return res.status(400).json({
             status : "failed",
             message : "please insert password or confirmation password"
           })
+        }
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                status:"failed",
+                message: "password not match",
+            });
         }
     const user = await Users.create(
         {
