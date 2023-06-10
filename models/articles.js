@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require ("mongoose");
 
 const articleSchema = new mongoose.Schema({
     title:{
@@ -13,7 +13,7 @@ const articleSchema = new mongoose.Schema({
     },
     image:{
         type: String,
-        required: [true, "please add images"]
+        required: [true] 
     },
     date:{
         type: Date,
@@ -34,4 +34,4 @@ const articleSchema = new mongoose.Schema({
     },
 });
 
-export default mongoose.model("articles", articleSchema);
+module.exports= mongoose.model("articles", articleSchema);

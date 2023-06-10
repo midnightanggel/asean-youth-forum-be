@@ -1,10 +1,10 @@
-import express from "express";
-import { config } from "dotenv";
-import cors from "cors";
-import connectDB from "./config/db.js";
-import users from "./routes/users.js";
-import articles from "./routes/articles.js";
-import auth from "./middleware/auth.js";
+const express = require('express')
+const { config } = require("dotenv");
+const cors = require("cors");
+const connectDB = require("./config/db.js");
+const users= require ("./routes/users.js");
+const articles= require ("./routes/articles.js");
+const auth= require ("./middleware/auth.js");
 
 config();
 const port = process.env.PORT;
@@ -21,3 +21,27 @@ app.all("*", (req, res) =>
 );
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
+
+
+// import http from 'http';
+// import { Server } from 'socket.io';
+
+// const server = http.createServer(app);
+// const io = new Server(server, {
+//     cors: {
+//         origin: process.env.SOCKET_ORIGIN,
+//         methods: ['GET', 'POST'],
+//     }
+// });
+
+// io.on('connection', function(socket) {
+//   console.info('user connected');
+
+//   socket.on('disconnect', () => {
+//       console.log('user disconnected');
+//   });    
+
+//   socket.on('sendMessage', function(msg) {
+//       io.emit('sendMessage', msg);
+//   });
+// })

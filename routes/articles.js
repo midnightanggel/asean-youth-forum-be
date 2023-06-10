@@ -1,19 +1,20 @@
-import express from "express";
-import { 
+const express = require('express')
+const{ 
     createarticles,
     getAllArticles,
     getArticle,
     updateArticle,
     deleteArticle
- } from "../controllers/articles.js";
+ }= require ("../controllers/articles.js");
+const upload = require("../config/multer.js");
 
 const router = express.Router();
 
 // route article
-router.post("/", createarticles);
+router.post("/",upload.single("file"), createarticles);
 router.get("/", getAllArticles);
 router.get("/:id", getArticle);
 router.put("/:id", updateArticle)
 router.delete("/:id", deleteArticle)
 
-export default router;
+module.exports = router;
