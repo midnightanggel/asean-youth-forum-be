@@ -1,24 +1,33 @@
 import article from "../models/articles.js";
 
+
 // handle createarticle
 export const createarticles = async (req, res) => {
     try {
-
-      const articles = await article.create(
-          {
-              title: req.body.title,
-              content: req.body.content,
-              image: req.body.image,
-              date: req.body.date,
-              like: req.body.like,
-              dislike: req.body.dislike,
-              comment: req.body.comment,
-          }
-          );
-      res.status(200).json({
-        message: "success",
-        articles,
-      });
+      const {title, content, image} = req.body;
+        if(!title){
+          res.status(400).json({
+            status: "failed",
+            message: "Please add Tittle" 
+          })
+        }
+        if(!content){
+          res.status(400).json({
+            status: "failed",
+            message: "Please add Content" 
+          })
+        }
+        if(!image){
+          res.status(400).json({
+            status: "failed",
+            message: "Please add image" 
+          })
+        }
+      let articles = await article.create(req.body);
+        res.status(200).json({
+          message: "success",
+          data: articles,
+        });
     } catch (error) {
       console.error(error);
       res.status(500).json({
@@ -26,3 +35,72 @@ export const createarticles = async (req, res) => {
       });
     }
   };
+
+//get all articles
+export const getAllArticles = async (req, res) => {
+  try {
+    const articles = await article.find();
+    res.status(200).json({
+      message: "success",
+      data: articles,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("No data");
+  }
+};
+
+//get article by id
+export const getArticle = async (req, res) => {
+  try {
+    const articles = await article.findById(req.params.id);
+
+    if (!articles) {
+      return res.status(404).json({ message: "Not found " });
+    }
+    res.status(200).json({
+      message: "success",
+      data: articles,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("No data");
+  }
+};
+
+//update article
+export const updateArticle = async (req, res) => {
+  try {
+    let articles = await article.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!articles) {
+      return res.status(404).json({ message: "Article Not found " });
+    }
+
+    res.status(200).json({
+      message: "success",
+      data: articles,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Server Error");
+  }
+};
+
+export const deleteArticle = async (req, res) => {
+  try {
+    const articles = await article.findByIdAndRemove(req.params.id);
+    if (!articles) {
+      return res.status(404).json({ message: "Not found " });
+    }
+    res.status(200).json({
+      message: "Article has been deleted",
+      data: articles,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Server Error");
+  }
+};

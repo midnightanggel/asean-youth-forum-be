@@ -3,10 +3,8 @@ import { config } from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import users from "./routes/users.js";
-
-// import auth from "./middleware/auth.js";
-import article from "./routes/article.js";
-// test
+import articles from "./routes/articles.js";
+import auth from "./middleware/auth.js";
 // masukkan kedalam .env
 
 
@@ -17,8 +15,8 @@ app.use(cors());
 app.use(express.json());
 connectDB();
 
-app.use("/users", users);
-app.use(article);
+app.use("/api/auth", users);
+app.use("/api/articles",auth, articles);
 app.get("/", (req, res) => res.send("Hello world"));
 app.all("*", (req, res) =>
   res.send("Sorry, the route you are going to does not exist")
