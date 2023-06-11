@@ -7,6 +7,8 @@ import users from "./routes/users.js";
 // import auth from "./middleware/auth.js";
 import article from "./routes/article.js";
 // test
+// masukkan kedalam .env
+
 
 config();
 const port = process.env.PORT;
@@ -21,5 +23,25 @@ app.get("/", (req, res) => res.send("Hello world"));
 app.all("*", (req, res) =>
   res.send("Sorry, the route you are going to does not exist")
 );
+
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: true, // semua ip diperbolehkan akses
+        methods: ['GET', 'POST'],
+    }
+});
+
+io.on('connection', function(socket) {
+  console.info('user connected');
+
+  socket.on('disconnect', () => {
+      console.log('user disconnected');
+  });    
+
+  socket.on('sendMessage', function(msg) {
+      io.emit('sendMessage', msg);
+  });
+})
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
