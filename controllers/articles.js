@@ -4,7 +4,7 @@ const cloudinary = require("../config/cloudinary.js");
 module.exports ={
   createarticles : async (req, res) => {
     try {
-      const {title, content, image} = req.body;
+      const {title, content} = req.body;
         if(!title){
           return res.status(400).json({
             status: "failed",
@@ -17,15 +17,8 @@ module.exports ={
             message: "Please add a Content" 
           })
         }
-        if(!image){
-          return res.status(400).json({
-            status: "failed",
-            message: "Please add an Image" 
-          })
-        }
       const _base64 = Buffer.from(req.files.image.data, 'base64').toString('base64');
       const base64 = `data:image/jpeg;base64,${_base64}`;
-  
       const cloudinaryResponse = await cloudinary.uploader.upload(base64, { public_id: new Date().getTime() });
       let articles = await article.create({
         title : req.body.title,
@@ -79,7 +72,7 @@ module.exports ={
   //update article
   updateArticle : async (req, res) => {
     try {
-      const {title, content, image} = req.body;
+      const {title, content} = req.body;
         if(!title){
           return res.status(400).json({
             status: "failed",
@@ -90,12 +83,6 @@ module.exports ={
           return res.status(400).json({
             status: "failed",
             message: "Please add a Content" 
-          })
-        }
-        if(!image){
-          return res.status(400).json({
-            status: "failed",
-            message: "Please add an Image" 
           })
         }
       const _base64 = Buffer.from(req.files.image.data, 'base64').toString('base64');
