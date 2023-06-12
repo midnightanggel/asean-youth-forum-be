@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import { config } from "dotenv";
+const jwt = require("jsonwebtoken");
+const { config } = require("dotenv");
 
 config();
 
@@ -26,5 +26,5 @@ const auth = (req, res, next) => {
   }
 };
 
-export default auth;
+module.exports= auth;
         
