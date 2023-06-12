@@ -6,12 +6,12 @@ const{
     updateArticle,
     deleteArticle
  }= require ("../controllers/articles.js");
-const upload = require("../config/multer.js");
+
 
 const router = express.Router();
 
 // route article
-router.post("/",upload.single("file"), createarticles);
+router.post("/", createarticles);
 router.get("/", getAllArticles);
 router.get("/:id", getArticle);
 router.put("/:id", updateArticle)

@@ -5,10 +5,12 @@ const connectDB = require("./config/db.js");
 const users= require ("./routes/users.js");
 const articles= require ("./routes/articles.js");
 const auth= require ("./middleware/auth.js");
+const upload = require("express-fileupload");
 
 config();
 const port = process.env.PORT;
 const app = express();
+app.use(upload());
 app.use(cors());
 app.use(express.json());
 connectDB();

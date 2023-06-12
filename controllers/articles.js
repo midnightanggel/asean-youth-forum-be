@@ -4,11 +4,11 @@ const cloudinary = require("../config/cloudinary.js");
 module.exports ={
   createarticles : async (req, res) => {
     try {
-      const {title, content} = req.body;
+      const {title, content, image} = req.body;
         if(!title){
           return res.status(400).json({
             status: "failed",
-            message: "Please add Tittle" 
+            message: "Please add Tittle",
           })
         }
         if(!content){
@@ -17,18 +17,27 @@ module.exports ={
             message: "Please add Content" 
           })
         }
-      const upload = await cloudinary.uploader.upload(req.file.path);
+        if(!image){
+          return res.status(400).json({
+            status: "failed",
+            message: "Please add Image" 
+          })
+        }
+      const _base64 = Buffer.from(req.files.image.data, 'base64').toString('base64');
+      const base64 = `data:image/jpeg;base64,${_base64}`;
+  
+      const cloudinaryResponse = await cloudinary.uploader.upload(base64, { public_id: new Date().getTime() });
       let articles = await article.create({
-        title,
-        content,
-        image : upload.secure_url
+        title : req.body.title,
+        content: req.body.content,
+        image : cloudinaryResponse.secure_url
       })
         res.status(200).json({
           message: "success",
           data: articles,
         });
     } catch (error) {
-      console.error(error);
+      console.log(error);
       res.status(500).json({
         message: "failed",
       });
@@ -70,14 +79,40 @@ module.exports ={
   //update article
   updateArticle : async (req, res) => {
     try {
-      let articles = await article.findByIdAndUpdate(req.params.id, req.body, {
+      const {title, content, image} = req.body;
+        if(!title){
+          return res.status(400).json({
+            status: "failed",
+            message: "Please add Tittle",
+          })
+        }
+        if(!content){
+          return res.status(400).json({
+            status: "failed",
+            message: "Please add Content" 
+          })
+        }
+        if(!image){
+          return res.status(400).json({
+            status: "failed",
+            message: "Please add Image" 
+          })
+        }
+      const _base64 = Buffer.from(req.files.image.data, 'base64').toString('base64');
+      const base64 = `data:image/jpeg;base64,${_base64}`;
+  
+      const cloudinaryResponse = await cloudinary.uploader.upload(base64, { public_id: new Date().getTime() });
+      let articles = await article.findByIdAndUpdate(req.params.id, {
+        title : req.body.title,
+        content: req.body.content,
+        image : cloudinaryResponse.secure_url
+      }, {
         new: true,
         runValidators: true,
       });
       if (!articles) {
-        return res.status(404).json({ message: "Article Not found " });
+        return res.status(404).json({ message: "Article Not found" });
       }
-
       res.status(200).json({
         message: "success",
         data: articles,
