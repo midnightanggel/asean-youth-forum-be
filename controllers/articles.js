@@ -8,19 +8,19 @@ module.exports ={
         if(!title){
           return res.status(400).json({
             status: "failed",
-            message: "Please add Tittle",
+            message: "Please add a Tittle",
           })
         }
         if(!content){
           return res.status(400).json({
             status: "failed",
-            message: "Please add Content" 
+            message: "Please add a Content" 
           })
         }
         if(!image){
           return res.status(400).json({
             status: "failed",
-            message: "Please add Image" 
+            message: "Please add an Image" 
           })
         }
       const _base64 = Buffer.from(req.files.image.data, 'base64').toString('base64');
@@ -83,19 +83,19 @@ module.exports ={
         if(!title){
           return res.status(400).json({
             status: "failed",
-            message: "Please add Tittle",
+            message: "Please add a Tittle",
           })
         }
         if(!content){
           return res.status(400).json({
             status: "failed",
-            message: "Please add Content" 
+            message: "Please add a Content" 
           })
         }
         if(!image){
           return res.status(400).json({
             status: "failed",
-            message: "Please add Image" 
+            message: "Please add an Image" 
           })
         }
       const _base64 = Buffer.from(req.files.image.data, 'base64').toString('base64');
