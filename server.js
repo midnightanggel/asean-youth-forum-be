@@ -6,6 +6,9 @@ const users= require ("./routes/users.js");
 const articles= require ("./routes/articles.js");
 const auth= require ("./middleware/auth.js");
 const upload = require("express-fileupload");
+const http = require('http');
+const { Server } = require('socket.io');
+
 
 config();
 const port = process.env.PORT;
