@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const forumDetailsSchema = new mongoose.Schema({
+const chatSchema = new mongoose.Schema({
     forum_id:{
         type: mongoose.Schema.ObjectId,
         ref : "forum",
@@ -22,4 +22,4 @@ const forumDetailsSchema = new mongoose.Schema({
     },
 });
 
-module.exports= mongoose.model("forum_details", forumDetailsSchema);
+module.exports= mongoose.model("chat", chatSchema);

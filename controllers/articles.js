@@ -26,13 +26,13 @@ module.exports ={
         image : cloudinaryResponse.secure_url
       })
         res.status(200).json({
-          message: "success",
+          status: "success",
           data: articles,
         });
     } catch (error) {
       console.log(error);
       res.status(500).json({
-        message: "failed",
+        status: "failed",
       });
     }
   },
@@ -41,13 +41,18 @@ module.exports ={
   getAllArticles : async (req, res) => {
     try {
       const articles = await article.find();
+      if (!articles) {
+        return res.status(404).json({ message: "Not found " });
+      }
       res.status(200).json({
-        message: "success",
+        status: "success",
         data: articles,
       });
     } catch (error) {
       console.log(error);
-      res.status(500).send("No data");
+      res.status(500).json({
+        status: "failed",
+      });
     }
   },
 
@@ -57,15 +62,17 @@ module.exports ={
       const articles = await article.findById(req.params.id);
 
       if (!articles) {
-        return res.status(404).json({ message: "Not found " });
+        return res.status(404).json({ status: "Not found " });
       }
       res.status(200).json({
-        message: "success",
+        status: "success",
         data: articles,
       });
     } catch (error) {
       console.log(error);
-      res.status(500).send("No data");
+      res.status(500).json({
+      status: "failed",
+      });
     }
   },
 
@@ -76,13 +83,13 @@ module.exports ={
         if(!title){
           return res.status(400).json({
             status: "failed",
-            message: "Please add a Tittle",
+            status: "Please add a Tittle",
           })
         }
         if(!content){
           return res.status(400).json({
             status: "failed",
-            message: "Please add a Content" 
+            status: "Please add a Content" 
           })
         }
       const _base64 = Buffer.from(req.files.image.data, 'base64').toString('base64');
@@ -98,31 +105,35 @@ module.exports ={
         runValidators: true,
       });
       if (!articles) {
-        return res.status(404).json({ message: "Article Not found" });
+        return res.status(404).json({ status: "Article Not found" });
       }
       res.status(200).json({
-        message: "success",
+        status: "success",
         data: articles,
       });
     } catch (error) {
       console.log(error);
-      res.status(500).send("Server Error");
-    }
+      res.status(500).json({
+      status: "failed",
+      });
+  }
   },
 
   deleteArticle : async (req, res) => {
     try {
       const articles = await article.findByIdAndRemove(req.params.id);
       if (!articles) {
-        return res.status(404).json({ message: "Not found " });
+        return res.status(404).json({ status: "Not found " });
       }
       res.status(200).json({
-        message: "Article has been deleted",
+        status: "Article has been deleted",
         data: articles,
       });
     } catch (error) {
       console.log(error);
-      res.status(500).send("Server Error");
-    }
+      res.status(500).json({
+      status: "failed",
+      });
+  }
   }
 }

@@ -27,13 +27,13 @@ module.exports ={
           author: req.user.id
         })
           res.status(200).json({
-            message: "success",
+            status: "success",
             data: forum,
           });
         } catch (error) {
             console.log(error);
             res.status(500).json({
-            message: "failed",
+            status: "failed",
             });
         }
     },
@@ -50,8 +50,10 @@ module.exports ={
           });
         } catch (error) {
           console.log(error);
-          res.status(500).send("No data");
-        }
+          res.status(500).json({
+          status: "failed",
+          });
+      }
     },
     
     getForum : async (req, res) => {
@@ -62,12 +64,14 @@ module.exports ={
             return res.status(404).json({ message: "Not found " });
             }
             res.status(200).json({
-            message: "success",
+            status: "success",
             data: forum,
             });
-        } catch (error) {
+          } catch (error) {
             console.log(error);
-            res.status(500).send("No data");
+            res.status(500).json({
+            status: "failed",
+            });
         }
     },
 
@@ -105,9 +109,11 @@ module.exports ={
             message: "success",
             data: forum,
             });
-        } catch (error) {
+          } catch (error) {
             console.log(error);
-            res.status(500).send("Server Error");
+            res.status(500).json({
+            status: "failed",
+            });
         }
     },
 }
