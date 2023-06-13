@@ -5,6 +5,7 @@ const connectDB = require("./config/db.js");
 const users= require ("./routes/users.js");
 const articles= require ("./routes/articles.js");
 const forum = require("./routes/forum.js")
+const chat = require("./routes/chat.js")
 const upload = require("express-fileupload");
 const http = require('http');
 const { Server } = require('socket.io');
@@ -21,6 +22,7 @@ connectDB();
 app.use("/api/auth", users);
 app.use("/api/articles", articles);
 app.use("/api/forum", forum);
+app.use("/api/chat", chat)
 app.get("/", (req, res) => res.send("Hello world"));
 app.all("*", (req, res) =>
   res.send("Sorry, the route you are going to does not exist")

@@ -13,7 +13,7 @@ const articleSchema = new mongoose.Schema({
     },
     image:{
         type: String,
-        required: [true] 
+        required: [true, "Please add image"] 
     },
     date:{
         type: Date,
