@@ -1,5 +1,10 @@
 const Users = require("../models/users.js");
+const jwt = require("jsonwebtoken");
+const { config } = require("dotenv");
 
+config();
+
+const jwtSecret = process.env.JWT_SECRET;
 
 module.exports = {
     register : async (req, res) => {
@@ -59,13 +64,13 @@ module.exports = {
           }
           );
       res.status(200).json({
-        message: "success",
+        status: "success",
         user,
       });
     } catch (error) {
       console.error(error);
       res.status(500).json({
-        message: "failed",
+        status: "failed",
       });
     }
   },
@@ -75,6 +80,7 @@ module.exports = {
       const { email, password } = req.body;
       if (!email || !password) {
         return res.status(400).json({
+          status:"failed",
           message: "Please provide an email and password",
         });
       }
@@ -83,6 +89,7 @@ module.exports = {
 
       if (!user) {
         return res.status(401).json({
+          status:"failed",
           message: "Wrong email or password",
         });
       }
@@ -90,14 +97,15 @@ module.exports = {
 
       if (!isMatch) {
         return res.status(401).json({
+          status: "failed",
           message: "Wrong email or password",
         });
       }
 
-      const token = user.getSignedJwtToken();
+      const token = jwt.sign({id:user._id}, jwtSecret);
 
       res.status(200).json({
-        message: "success",
+        status: "success",
         token,
         user: {
           id: user.id,
@@ -106,7 +114,9 @@ module.exports = {
       });
     } catch (error) {
       console.error(error);
-      res.status(500).send("Server Error");
+      res.status(500).json({
+        status: "failed",
+      });
     }
   }
 }
