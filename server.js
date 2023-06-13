@@ -4,7 +4,7 @@ const cors = require("cors");
 const connectDB = require("./config/db.js");
 const users= require ("./routes/users.js");
 const articles= require ("./routes/articles.js");
-const auth= require ("./middleware/auth.js");
+const forum = require("./routes/forum.js")
 const upload = require("express-fileupload");
 const http = require('http');
 const { Server } = require('socket.io');
@@ -19,7 +19,8 @@ app.use(express.json());
 connectDB();
 
 app.use("/api/auth", users);
-app.use("/api/articles",auth, articles);
+app.use("/api/articles", articles);
+app.use("/api/forum", forum);
 app.get("/", (req, res) => res.send("Hello world"));
 app.all("*", (req, res) =>
   res.send("Sorry, the route you are going to does not exist")
