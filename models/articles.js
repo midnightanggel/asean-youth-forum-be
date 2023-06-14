@@ -36,7 +36,6 @@ const articleSchema = new mongoose.Schema({
       },
       comment: {
         type: String,
-        required: [true, "Please add comment"],
       },
       createdAt: {
         type: Date,
