@@ -178,6 +178,7 @@ module.exports = {
           .status(404)
           .json({ status: "failed", message: "User not found" });
       }
+
       articles.comments.push({
         user: user._id,
         comment: req.body.comment,
@@ -198,13 +199,27 @@ module.exports = {
 
   getMostCommented: async (req, res) => {
     try {
-      const articles = await article.aggregate([
-        {
-          $project: { title: 1, commentCount: { $size: "$comments" }, date: 1 },
-        },
-        { $sort: { commentCount: -1 } },
-        { $limit: 5 },
-      ]);
+      const articles = await article
+        .aggregate([
+          {
+            $project: {
+              _id: 1,
+              title: 1,
+              image: 1,
+              date: 1,
+              commentCount: { $size: "$comments" },
+            },
+          },
+          {
+            $sort: {
+              commentCount: -1,
+            },
+          },
+          {
+            $limit: 5,
+          },
+        ])
+        .exec();
       if (!articles) {
         return res.status(404).json({ message: "Not found " });
       }
