@@ -204,6 +204,7 @@ module.exports = {
             $project: {
               _id: 1,
               title: 1,
+              content: 1,
               image: 1,
               date: 1,
               commentCount: { $size: { $ifNull: ["$comments", []] } },
