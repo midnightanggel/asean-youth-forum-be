@@ -207,7 +207,7 @@ module.exports = {
               title: 1,
               image: 1,
               date: 1,
-              commentCount: { $size: "$comments" },
+              commentCount: { $size: { $ifNull: ["$comments", []] } },
             },
           },
           {
