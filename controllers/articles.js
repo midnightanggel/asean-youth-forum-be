@@ -162,7 +162,6 @@ module.exports = {
       });
     }
   },
-
   //add comment on article
   createComment: async (req, res) => {
     try {

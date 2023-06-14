@@ -7,62 +7,59 @@ config();
 const jwtSecret = process.env.JWT_SECRET;
 
 module.exports = {
-    register : async (req, res) => {
+  register: async (req, res) => {
     try {
-      const {name, age, country, email} = req.body;
-          if (!name){
-            return res.status(400).json({
-              status : "failed",
-              message : "please insert name"
-            });
-          }
-          if (!age){
-            return res.status(400).json({
-              status : "failed",
-              message : "please insert age"
-            })
-          }
-          if (!country){
-            return res.status(400).json({
-              status : "failed",
-              message : "please insert country"
-            })
-          }
-          if (!email){
-            return res.status(400).json({
-              status : "failed",
-              message : "please insert email"
-            })
-          }
-      let isMatch = await Users.findOne({ email: email }).exec();
-          if (isMatch){
-            return res.status(400).json({
-              status:"failed",
-              message: "email already exist, please login",
-          });
-          }
-      const { password, confirmPassword} = req.body;
-          if (!password || !confirmPassword){
-            return res.status(400).json({
-              status : "failed",
-              message : "please insert password or confirmation password"
-            })
-          }
-          if (password !== confirmPassword) {
-              return res.status(400).json({
-                  status:"failed",
-                  message: "password not match",
-              });
-          }
-      const user = await Users.create(
-          {
-              name: req.body.name,
-              age: req.body.age,
-              country: req.body.country,
-              email: req.body.email,
-              password: req.body.password,
-          }
-          );
+      const { name, age, country, email, password, confirmPassword } = req.body;
+      if (!name) {
+        return res.status(400).json({
+          status: "failed",
+          message: "please insert name",
+        });
+      }
+      if (!age) {
+        return res.status(400).json({
+          status: "failed",
+          message: "please insert age",
+        });
+      }
+      if (!country) {
+        return res.status(400).json({
+          status: "failed",
+          message: "please insert country",
+        });
+      }
+      if (!email) {
+        return res.status(400).json({
+          status: "failed",
+          message: "please insert email",
+        });
+      }
+      const isMatch = await Users.findOne({ email: email }).exec();
+      if (isMatch) {
+        return res.status(400).json({
+          status: "failed",
+          message: "email already exist, please login",
+        });
+      }
+      if (!password || !confirmPassword) {
+        return res.status(400).json({
+          status: "failed",
+          message: "please insert password or confirmation password",
+        });
+      }
+      if (password !== confirmPassword) {
+        return res.status(400).json({
+          status: "failed",
+          message: "password not match",
+        });
+      }
+      const user = await Users.create({
+        name: req.body.name,
+        age: req.body.age,
+        country: req.body.country,
+        email: req.body.email,
+        password: req.body.password,
+      });
       res.status(200).json({
         status: "success",
         user,
@@ -74,13 +71,13 @@ module.exports = {
       });
     }
   },
-  
+
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
       if (!email || !password) {
         return res.status(400).json({
-          status:"failed",
+          status: "failed",
           message: "Please provide an email and password",
         });
       }
@@ -89,7 +86,7 @@ module.exports = {
 
       if (!user) {
         return res.status(401).json({
-          status:"failed",
+          status: "failed",
           message: "Wrong email or password",
         });
       }
@@ -102,7 +99,7 @@ module.exports = {
         });
       }
 
-      const token = jwt.sign({id:user._id}, jwtSecret);
+      const token = jwt.sign({ id: user._id }, jwtSecret);
 
       res.status(200).json({
         status: "success",
@@ -118,5 +115,5 @@ module.exports = {
         status: "failed",
       });
     }
-  }
-}
+  },
+};
