@@ -34,7 +34,10 @@ const articleSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
-      comment: String,
+      comment: {
+        type: String,
+        required: [true, "Please add comment"],
+      },
       createdAt: {
         type: Date,
         default: Date.now,

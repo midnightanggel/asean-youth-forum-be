@@ -46,8 +46,13 @@ module.exports = {
   //get all articles
   getAllArticles: async (req, res) => {
     try {
+      const { search } = req.query;
+      let query = {};
+      if (search) {
+        query.title = { $regex: search, $options: `i` };
+      }
       const articles = await article
-        .find()
+        .find(query)
         .populate("comments.user", "name")
         .exec();
       if (!articles) {
@@ -187,6 +192,30 @@ module.exports = {
       res.status(500).json({
         status: "failed",
         message: "Failed add comment",
+      });
+    }
+  },
+
+  getMostCommented: async (req, res) => {
+    try {
+      const articles = await article.aggregate([
+        {
+          $project: { title: 1, commentCount: { $size: "$comments" }, date: 1 },
+        },
+        { $sort: { commentCount: -1 } },
+        { $limit: 5 },
+      ]);
+      if (!articles) {
+        return res.status(404).json({ message: "Not found " });
+      }
+      res.status(200).json({
+        status: "success",
+        data: articles,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: "failed",
       });
     }
   },
