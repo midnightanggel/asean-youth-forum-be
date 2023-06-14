@@ -3,7 +3,8 @@ const{
     createforum,
     getAllForum,
     getForum,
-    updateForum
+    updateForum,
+    deleteForum
  }= require ("../controllers/forum.js");
 
 const auth= require ("../middleware/auth.js");
@@ -14,5 +15,6 @@ router.post("/", auth,createforum);
 router.get("/", getAllForum);
 router.get("/:id", getForum);
 router.put("/:id", auth,updateForum)
+router.delete("/:id", auth, deleteForum)
 
 module.exports = router

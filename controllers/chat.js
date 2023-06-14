@@ -16,6 +16,25 @@ module.exports ={
               message: "Please add a message" 
             })
           }
+          io.on('connection', function(socket) {
+            console.info('user connected');
+          
+            socket.on('disconnect', () => {
+                console.log('user disconnected');
+            });    
+          
+            socket.on('sendToForum', function(msg) {
+              const parsed = JSON.parse(msg);
+      
+              const newDiscussion = {
+                  forum_id: parsed.forum_id,
+                  user_id: parsed.user_id,
+                  message: parsed.message,
+                  sent_at: new Date(),
+              };
+              
+          });
+          })
         let chat = await chats.create({
           forum_id : req.body.forum_id,
           user_id: req.user.id,
@@ -39,6 +58,7 @@ module.exports ={
         if (!chat) {
           return res.status(404).json({ message: "Not found " });
         }
+        io.emit('broadcastToFrontend', chat);
         res.status(200).json({
           status: "success",
           data: chat,
