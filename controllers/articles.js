@@ -177,7 +177,12 @@ module.exports = {
           .status(404)
           .json({ status: "failed", message: "User not found" });
       }
-
+      if (!req.body.comment) {
+        return res.status(400).json({
+          status: "failed",
+          message: "Please add a comment",
+        });
+      }
       articles.comments.push({
         user: user._id,
         comment: req.body.comment,
