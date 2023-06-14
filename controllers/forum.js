@@ -116,4 +116,22 @@ module.exports ={
             });
         }
     },
+    deleteForum: async (req, res) => {
+      try {
+        const forum = await forums.findByIdAndRemove(req.params.id);
+        if (!forum) {
+          return res.status(404).json({ status: "Not found " });
+        }
+        res.status(200).json({
+          status: "success",
+          message: "Article has been deleted",
+          data: forum,
+        });
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({
+          status: "failed",
+        });
+      }
+    },
 }
