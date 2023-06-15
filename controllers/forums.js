@@ -72,7 +72,7 @@ module.exports = {
       const forum = await forums
         .find(query)
         .populate("author", "name")
-        .populate("chats.user", "name")
+        .populate("chats.user", "name image")
         .exec();
       if (!forum) {
         return res
@@ -96,7 +96,7 @@ module.exports = {
       const forum = await forums
         .findById(req.params.id)
         .populate("author", "name")
-        .populate("chats.user", "name")
+        .populate("chats.user", "name image")
         .exec();
 
       if (!forum) {
@@ -234,7 +234,6 @@ module.exports = {
       }
       forum.chats.push({
         user: user._id,
-        image: user.image,
         message: message,
         sendAt: Date.now(),
       });
