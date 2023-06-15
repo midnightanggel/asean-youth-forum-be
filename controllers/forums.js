@@ -195,10 +195,9 @@ module.exports = {
     }
   },
 
-  getMostChats: async (req, res) => {
+  getMostChat: async (req, res) => {
     try {
-      const forum = await forums
-        .aggregate([
+      const forum = await forums.aggregate([
           {
             $project: {
               _id: 1,
@@ -206,13 +205,12 @@ module.exports = {
               description: 1,
               publish_date: 1,
               image: 1,
-              author: 1,
-              chatsCount: { $size: { $ifNull: ["$chats", []] } },
+              chatCount: { $size: { $ifNull: ["$chats", []] } },
             },
           },
           {
             $sort: {
-              chatsCount: -1,
+              chatCount: -1,
             },
           },
           {
