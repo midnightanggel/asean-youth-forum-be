@@ -108,6 +108,7 @@ module.exports = {
         user: {
           id: user.id,
           name: user.name,
+          image : user.image
         },
       });
     } catch (error) {
