@@ -56,7 +56,9 @@ module.exports = {
         .populate("comments.user", "name")
         .exec();
       if (!articles) {
-        return res.status(404).json({ message: "Not found " });
+        return res
+          .status(404)
+          .json({ status: "failed", message: "Article not found " });
       }
       res.status(200).json({
         status: "success",
@@ -79,7 +81,9 @@ module.exports = {
         .exec();
 
       if (!articles) {
-        return res.status(404).json({ status: "Not found " });
+        return res
+          .status(404)
+          .json({ status: "failed", message: "Article not found " });
       }
       res.status(200).json({
         status: "success",
@@ -130,7 +134,9 @@ module.exports = {
         }
       );
       if (!articles) {
-        return res.status(404).json({ status: "Article Not found" });
+        return res
+          .status(404)
+          .json({ status: "failed", message: "Article not found " });
       }
       res.status(200).json({
         status: "success",
