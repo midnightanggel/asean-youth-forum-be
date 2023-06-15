@@ -18,7 +18,6 @@ const forumSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: [true],
     default: "https://www.aseanbriefing.com/news/wp-content/uploads/2020/09/The-27th-ASEAN-Regional-Forum-Salient-Features.jpg"
   },
   author: {
