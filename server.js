@@ -16,7 +16,7 @@ const app = express();
 app.use(upload());
 app.use(
   cors({
-    origin: "*",
+    origin: process.env.ORIGIN,
   })
 );
 app.use(express.json());
@@ -36,7 +36,7 @@ const server = app.listen(port, () =>
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: process.env.ORIGIN,
   },
 });
 

@@ -15,6 +15,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please add your Country"]
   },
+  image: {
+    type: String,
+    required: [true],
+    default: "https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png"
+  },
   email: {
     type: String,
     required: [true, "Please add an email"],

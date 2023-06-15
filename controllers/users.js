@@ -1,6 +1,7 @@
 const Users = require("../models/users.js");
 const jwt = require("jsonwebtoken");
 const { config } = require("dotenv");
+const cloudinary = require("../config/cloudinary.js")
 
 config();
 
@@ -111,6 +112,83 @@ module.exports = {
       });
     } catch (error) {
       console.error(error);
+      res.status(500).json({
+        status: "failed",
+      });
+    }
+  },
+  getUser: async (req, res) => {
+    try {
+      const user = await Users.findById(req.user.id)
+      if (!user) {
+        return res
+          .status(404)
+          .json({ status: "failed", message: "User not found " });
+      }
+      res.status(200).json({
+        status: "success",
+        data: user,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: "failed",
+      });
+    }
+  },
+  updateUser: async (req, res) => {
+    try {
+      const {name, age, country} = req.body;
+      if (!name) {
+        return res.status(400).json({
+          status: "failed",
+          status: "Please add a Name",
+        });
+      }
+      if (!age) {
+        return res.status(400).json({
+          status: "failed",
+          status: "Please add a Age",
+        });
+      }
+      if (!country) {
+        return res.status(400).json({
+          status: "failed",
+          status: "Please add a Country",
+        });
+      }
+      const _base64 = Buffer.from(req.files.image.data, "base64").toString(
+        "base64"
+      );
+      const base64 = `data:image/jpeg;base64,${_base64}`;
+
+      const cloudinaryResponse = await cloudinary.uploader.upload(base64, {
+        public_id: new Date().getTime(),
+      });
+      let user = await Users.findByIdAndUpdate(
+        req.user.id,
+        {
+          name: req.body.name,
+          age: req.body.age,
+          country: req.body.country,
+          image: cloudinaryResponse.secure_url,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+      if (!user) {
+        return res
+          .status(404)
+          .json({ status: "failed", message: "User not found " });
+      }
+      res.status(200).json({
+        status: "success",
+        data: user,
+      });
+    } catch (error) {
+      console.log(error);
       res.status(500).json({
         status: "failed",
       });
