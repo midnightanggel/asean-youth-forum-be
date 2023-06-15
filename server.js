@@ -29,44 +29,30 @@ app.all("*", (req, res) =>
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: true, // semua ip diperbolehkan akses
+    origin: true,
     methods: ["GET", "POST"],
   },
 });
 
 io.on("connection", function (socket) {
-  console.info("user connected");
+  console.log("user connected");
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });
 
-  socket.on("sendMessage", function (msg) {
-    io.emit("sendMessage", msg);
+  socket.on("sendToForum", function (msg) {
+    const parsed = JSON.parse(msg);
+
+    const newDiscussion = {
+      message: parsed.message,
+      sent_at: new Date(),
+    };
+
+    // Save('ForumDiscussion', newDiscussion);
+
+    io.emit("broadcastToFrontend", JSON.stringify(newDiscussion));
   });
 });
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
-
-// import http from 'http';
-// import { Server } from 'socket.io';
-
-// const server = http.createServer(app);
-// const io = new Server(server, {
-//     cors: {
-//         origin: process.env.SOCKET_ORIGIN,
-//         methods: ['GET', 'POST'],
-//     }
-// });
-
-// io.on('connection', function(socket) {
-//   console.info('user connected');
-
-//   socket.on('disconnect', () => {
-//       console.log('user disconnected');
-//   });
-
-//   socket.on('sendMessage', function(msg) {
-//       io.emit('sendMessage', msg);
-//   });
-// })
+server.listen(port, () => console.log(`Server running on port ${port}`));
