@@ -14,7 +14,11 @@ config();
 const port = process.env.PORT;
 const app = express();
 app.use(upload());
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json());
 connectDB();
 
@@ -29,7 +33,7 @@ app.all("*", (req, res) =>
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://asean-youth-forum-fe.vercel.app/",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
