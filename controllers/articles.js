@@ -192,6 +192,7 @@ module.exports = {
       articles.comments.push({
         user: user._id,
         comment: req.body.comment,
+        image: user.image,
         createdAt: Date.now(),
       });
       await articles.save();

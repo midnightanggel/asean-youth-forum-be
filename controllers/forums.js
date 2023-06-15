@@ -234,6 +234,7 @@ module.exports = {
       }
       forum.chats.push({
         user: user._id,
+        image: user.image,
         message: message,
         sendAt: Date.now(),
       });
