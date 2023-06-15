@@ -30,7 +30,10 @@ app.all("*", (req, res) =>
   res.send("Sorry, the route you are going to does not exist")
 );
 
-const server = http.createServer(app);
+const server = app.listen(port, () =>
+  console.log(`Server running on port ${port}`)
+);
+
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -59,5 +62,3 @@ io.on("connection", function (socket) {
     io.emit("broadcastToFrontend", JSON.stringify(newDiscussion));
   });
 });
-
-server.listen(port, () => console.log(`Server running on port ${port}`));
