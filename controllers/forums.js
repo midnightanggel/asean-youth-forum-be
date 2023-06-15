@@ -170,9 +170,46 @@ module.exports = {
   },
   getMostChats: async (req, res) => {
     try {
+      const forum = await forums.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "author",
+            foreignField: "_id",
+            as: "authorInfo",
+          },
+        },
+        {
+          $addFields: {
+            author: { $arrayElemAt: ["$authorInfo.name", 0] },
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            title: 1,
+            description: 1,
+            author: 1,
+            publish_date: 1,
+            image: 1,
+            chatCount: { $size: { $ifNull: ["$chats", []] } },
+          },
+        },
+        {
+          $sort: {
+            chatCount: -1,
+          },
+        },
+        {
+          $limit: 5,
+        },
+      ]);
+      if (!forum) {
+        return res.status(404).json({ message: "Not found " });
+      }
       res.status(200).json({
         status: "success",
-        data: "test",
+        data: forum,
       });
     } catch (error) {
       console.log(error);
