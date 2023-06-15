@@ -13,7 +13,6 @@ const articleSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: [true, "Please add image"],
     default: "https://aseanyouthforum.org/wp-content/uploads/2019/03/cropped-Logo-Asean-Youth-Forum-HR-01.png"
   },
   date: {
