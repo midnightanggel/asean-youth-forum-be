@@ -218,9 +218,46 @@ module.exports = {
       return { status: "success", message: "Message added successfully" };
     } catch (error) {
       console.log(error);
-      res
-        .status(500)
-        .json({ status: "failed", message: "Failed to add message" });
+      return { status: "failed", message: "Failed to add message" };
+    }
+  },
+
+  getMostChat: async (req, res) => {
+    try {
+      const forum = await forums
+        .aggregate([
+          {
+            $project: {
+              _id: 1,
+              title: 1,
+              description: 1,
+              publish_date: 1,
+              image: 1,
+              chatCount: { $size: { $ifNull: ["$chats", []] } },
+            },
+          },
+          {
+            $sort: {
+              chatCount: -1,
+            },
+          },
+          {
+            $limit: 5,
+          },
+        ])
+        .exec();
+      if (!forum) {
+        return res.status(404).json({ message: "Not found " });
+      }
+      res.status(200).json({
+        status: "success",
+        data: forum,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: "failed",
+      });
     }
   },
 };
