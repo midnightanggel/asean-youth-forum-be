@@ -53,7 +53,7 @@ module.exports = {
       }
       const articles = await article
         .find(query)
-        .populate("comments.user", "name")
+        .populate("comments.user", "name image")
         .exec();
       if (!articles) {
         return res
@@ -77,7 +77,7 @@ module.exports = {
     try {
       const articles = await article
         .findById(req.params.id)
-        .populate("comments.user", "name")
+        .populate("comments.user", "name image")
         .exec();
 
       if (!articles) {
@@ -192,7 +192,6 @@ module.exports = {
       articles.comments.push({
         user: user._id,
         comment: req.body.comment,
-        image: user.image,
         createdAt: Date.now(),
       });
       await articles.save();
