@@ -19,6 +19,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: "https://w7.pngwing.com/pngs/981/645/png-transparent-default-profile-united-states-computer-icons-desktop-free-high-quality-person-icon-miscellaneous-silhouette-symbol-thumbnail.png"
   },
+  role:{
+    type: String,
+    default: "user"
+  },
   email: {
     type: String,
     required: [true, "Please add an email"],
