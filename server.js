@@ -41,19 +41,8 @@ io.on("connection", function (socket) {
     console.log("user disconnected");
   });
 
-  socket.on("sendToForum", function (msg) {
-    const parsed = JSON.parse(msg);
-
-    const newDiscussion = {
-      forum_id: parsed.forum_id,
-      user_id: parsed.user_id,
-      message: parsed.message,
-      sent_at: new Date(),
-    };
-
-    // Save("ForumDiscussion", newDiscussion);
-
-    io.emit("broadcastToFrontend", JSON.stringify(newDiscussion));
+  socket.on("sendMessage", function (msg) {
+    io.emit("sendMessage", msg);
   });
 });
 
