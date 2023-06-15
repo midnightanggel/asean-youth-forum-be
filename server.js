@@ -50,8 +50,16 @@ io.on("connection", function (socket) {
 
     createMessage(parsed.forum_id, parsed.user_id, parsed.message);
 
+    const newDiscussion = {
+      forum_id: parsed.forum_id,
+      user_id: parsed.user_id,
+      message: parsed.message,
+      sent_at: new Date(),
+    };
+
     io.emit("broadcastToFrontend", JSON.stringify(newDiscussion));
   });
 });
 
-server.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port, () => console.log(`Server running on port ${port}`));
+server.listen(8000, () => console.log(`Server running on port ${8000}`));
