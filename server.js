@@ -44,12 +44,7 @@ io.on("connection", function (socket) {
   socket.on("sendToForum", function (msg) {
     const parsed = JSON.parse(msg);
 
-    const newDiscussion = {
-      message: parsed.message,
-      sent_at: new Date(),
-    };
-
-    // Save('ForumDiscussion', newDiscussion);
+    createMessage(parsed.forum_id, parsed.user_id, parsed.message)
 
     io.emit("broadcastToFrontend", JSON.stringify(newDiscussion));
   });
