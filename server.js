@@ -29,7 +29,7 @@ app.all("*", (req, res) =>
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: true,
+    origin: "https://asean-youth-forum-fe.vercel.app/",
     methods: ["GET", "POST"],
   },
 });
@@ -44,7 +44,7 @@ io.on("connection", function (socket) {
   socket.on("sendToForum", function (msg) {
     const parsed = JSON.parse(msg);
 
-    createMessage(parsed.forum_id, parsed.user_id, parsed.message)
+    createMessage(parsed.forum_id, parsed.user_id, parsed.message);
 
     io.emit("broadcastToFrontend", JSON.stringify(newDiscussion));
   });

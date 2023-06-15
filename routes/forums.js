@@ -5,7 +5,7 @@ const {
   getForum,
   updateForum,
   deleteForum,
-  getMostChats
+  getMostChats,
 } = require("../controllers/forums.js");
 
 const auth = require("../middleware/auth.js");
@@ -14,9 +14,9 @@ const router = express.Router();
 
 router.post("/", auth, createforum);
 router.get("/", getAllForum);
+router.get("/most-chats", getMostChats);
 router.get("/:id", getForum);
 router.put("/:id", auth, updateForum);
 router.delete("/:id", auth, deleteForum);
-router.get("/most-chat", getMostChats);
 
 module.exports = router;

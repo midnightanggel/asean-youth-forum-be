@@ -168,7 +168,34 @@ module.exports = {
       });
     }
   },
-
+  getMostChats: async (req, res) => {
+    try {
+      const { search } = req.query;
+      let query = {};
+      if (search) {
+        query.title = { $regex: search, $options: `i` };
+      }
+      const forum = await forums
+        .find(query)
+        .populate("author", "name")
+        .populate("chats.user", "name")
+        .exec();
+      if (!forum) {
+        return res
+          .status(404)
+          .json({ status: "failed", message: "Not found " });
+      }
+      res.status(200).json({
+        status: "success",
+        data: forum,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: "failed",
+      });
+    }
+  },
   createMessage: async (forumId, userId, message) => {
     try {
       const forum = await forums.findById(forumId);
@@ -191,47 +218,9 @@ module.exports = {
       return { status: "success", message: "Message added successfully" };
     } catch (error) {
       console.log(error);
-      return { status: "failed", message: "Failed to add message" };
-    }
-  },
-
-  getMostChats: async (req, res) => {
-    try {
-      const forum = await forums
-        .aggregate([
-          {
-            $project: {
-              _id: 1,
-              title: 1,
-              description: 1,
-              publish_date: 1,
-              image: 1,
-              author: 1,
-              chatsCount: { $size: { $ifNull: ["$chats", []] } },
-            },
-          },
-          {
-            $sort: {
-              chatsCount: -1,
-            },
-          },
-          {
-            $limit: 5,
-          },
-        ])
-        .exec();
-      if (!forum) {
-        return res.status(404).json({ message: "Not found " });
-      }
-      res.status(200).json({
-        status: "success",
-        data: forum,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        status: "failed",
-      });
+      res
+        .status(500)
+        .json({ status: "failed", message: "Failed to add message" });
     }
   },
 };
