@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    default: "https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png"
+    default: "https://w7.pngwing.com/pngs/981/645/png-transparent-default-profile-united-states-computer-icons-desktop-free-high-quality-person-icon-miscellaneous-silhouette-symbol-thumbnail.png"
   },
   email: {
     type: String,
