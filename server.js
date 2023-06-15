@@ -34,7 +34,6 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"],
   },
 });
 
@@ -61,5 +60,4 @@ io.on("connection", function (socket) {
   });
 });
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
-server.listen(8000, () => console.log(`Server running on port ${8000}`));
+server.listen(port, () => console.log(`Server running on port ${port}`));
