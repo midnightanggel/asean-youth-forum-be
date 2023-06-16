@@ -1,7 +1,7 @@
 const Users = require("../models/users.js");
 const jwt = require("jsonwebtoken");
 const { config } = require("dotenv");
-const cloudinary = require("../config/cloudinary.js")
+const cloudinary = require("../config/cloudinary.js");
 
 config();
 
@@ -108,7 +108,7 @@ module.exports = {
         user: {
           id: user.id,
           name: user.name,
-          image : user.image
+          image: user.image,
         },
       });
     } catch (error) {
@@ -120,7 +120,7 @@ module.exports = {
   },
   getUser: async (req, res) => {
     try {
-      const user = await Users.findById(req.user.id)
+      const user = await Users.findById(req.user.id);
       if (!user) {
         return res
           .status(404)
@@ -139,46 +139,36 @@ module.exports = {
   },
   updateUser: async (req, res) => {
     try {
-      const {name, age, country} = req.body;
-      if (!name) {
+      const { name, age, country } = req.body;
+      if (!name && !age && !country && !req.files) {
         return res.status(400).json({
           status: "failed",
-          status: "Please add a Name",
+          message: "Please update at least one data",
         });
       }
-      if (!age) {
-        return res.status(400).json({
-          status: "failed",
-          status: "Please add a Age",
-        });
-      }
-      if (!country) {
-        return res.status(400).json({
-          status: "failed",
-          status: "Please add a Country",
-        });
-      }
-      const _base64 = Buffer.from(req.files.image.data, "base64").toString(
-        "base64"
-      );
-      const base64 = `data:image/jpeg;base64,${_base64}`;
+      const dataUser = {
+        name: req.body.name,
+        age: req.body.age,
+        country: req.body.country,
+      };
 
-      const cloudinaryResponse = await cloudinary.uploader.upload(base64, {
-        public_id: new Date().getTime(),
+      if (req.files) {
+        const _base64 = Buffer.from(req.files.image.data, "base64").toString(
+          "base64"
+        );
+        const base64 = `data:image/jpeg;base64,${_base64}`;
+
+        const cloudinaryResponse = await cloudinary.uploader.upload(base64, {
+          public_id: new Date().getTime(),
+        });
+
+        dataUser.image = cloudinaryResponse.secure_url;
+      }
+
+      const user = await Users.findByIdAndUpdate(req.user.id, dataUser, {
+        new: true,
+        runValidators: true,
       });
-      let user = await Users.findByIdAndUpdate(
-        req.user.id,
-        {
-          name: req.body.name,
-          age: req.body.age,
-          country: req.body.country,
-          image: cloudinaryResponse.secure_url,
-        },
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
       if (!user) {
         return res
           .status(404)
