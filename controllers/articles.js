@@ -6,13 +6,6 @@ const cloudinary = require("../config/cloudinary.js");
 module.exports = {
   createarticles: async (req, res) => {
     try {
-      const user = await Users.findOne({role: "admin"})
-      if (!user){
-        return res.status(400).json({
-          status: "failed",
-          message: "Not Allowed"
-        })
-      }
       const { title, content } = req.body;
       if (!title) {
         return res.status(400).json({
@@ -107,13 +100,6 @@ module.exports = {
   //update article
   updateArticle: async (req, res) => {
     try {
-      const user = await Users.findOne({role: "admin"})
-      if (!user){
-        return res.status(400).json({
-          status: "failed",
-          message: "Not Allowed"
-        })
-      }
       const { title, content } = req.body;
       if (!title) {
         return res.status(400).json({
@@ -166,13 +152,6 @@ module.exports = {
   //delete article
   deleteArticle: async (req, res) => {
     try {
-      const user = await Users.findOne({role: "admin"})
-      if (!user){
-        return res.status(400).json({
-          status: "failed",
-          message: "Not Allowed"
-        })
-      }
       const articles = await article.findByIdAndRemove(req.params.id);
       if (!articles) {
         return res.status(404).json({ status: "Not found " });
