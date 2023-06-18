@@ -53,6 +53,7 @@ module.exports = {
       }
       const articles = await article
         .find(query)
+        .sort({ date: -1 })
         .populate("comments.user", "name image")
         .exec();
       if (!articles) {
@@ -101,33 +102,34 @@ module.exports = {
   updateArticle: async (req, res) => {
     try {
       const { title, content } = req.body;
-      if (!title) {
+      if (!title && !content && !req.files) {
         return res.status(400).json({
           status: "failed",
-          status: "Please add a Tittle",
+          message: "Please update at least one data",
         });
       }
-      if (!content) {
-        return res.status(400).json({
-          status: "failed",
-          status: "Please add a Content",
-        });
-      }
-      const _base64 = Buffer.from(req.files.image.data, "base64").toString(
-        "base64"
-      );
-      const base64 = `data:image/jpeg;base64,${_base64}`;
 
-      const cloudinaryResponse = await cloudinary.uploader.upload(base64, {
-        public_id: new Date().getTime(),
-      });
-      let articles = await article.findByIdAndUpdate(
+      const dataArticle = {
+        title,
+        content,
+      };
+
+      if (req.files) {
+        const _base64 = Buffer.from(req.files.image.data, "base64").toString(
+          "base64"
+        );
+        const base64 = `data:image/jpeg;base64,${_base64}`;
+
+        const cloudinaryResponse = await cloudinary.uploader.upload(base64, {
+          public_id: new Date().getTime(),
+        });
+
+        dataArticle.image = cloudinaryResponse.secure_url;
+      }
+
+      const articles = await article.findByIdAndUpdate(
         req.params.id,
-        {
-          title: req.body.title,
-          content: req.body.content,
-          image: cloudinaryResponse.secure_url,
-        },
+        dataArticle,
         {
           new: true,
           runValidators: true,
