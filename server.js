@@ -52,6 +52,6 @@ io.on("connection", function (socket) {
 
     createMessage(parsed.forum_id, parsed.user_id, parsed.message);
 
-    io.emit("broadcastToFrontend", JSON.stringify(JSON.stringify(parsed)));
+    io.emit("broadcastToFrontend", JSON.stringify(msg));
   });
 });
