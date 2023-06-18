@@ -52,6 +52,15 @@ io.on("connection", function (socket) {
 
     createMessage(parsed.forum_id, parsed.user_id, parsed.message);
 
-    io.emit("broadcastToFrontend", JSON.stringify(msg));
+    const newDiscussion = {
+      forum_id: parsed.forum_id,
+      user_id: parsed.user_id,
+      user_name: parsed.user_name,
+      user_image: parsed.user_image,
+      message: parsed.message,
+      sent_at: new Date(),
+    };
+
+    io.emit("broadcastToFrontend", JSON.stringify(newDiscussion));
   });
 });
