@@ -9,12 +9,16 @@ const auth = (req, res, next) => {
   const token = req.header("Authorization");
 
   if (!token) {
-    return res.status(401).json({ msg: "No token, authorization denied" });
+    return res
+      .status(401)
+      .json({ status: "failed", message: "No token, authorization denied" });
   }
   try {
     jwt.verify(token, jwtSecret, (error, decoded) => {
       if (error) {
-        return res.status(401).json({ msg: "Token is not valid" });
+        return res
+          .status(401)
+          .json({ status: "failed", message: "Token is not valid" });
       } else {
         req.user = decoded;
         next();
@@ -22,9 +26,8 @@ const auth = (req, res, next) => {
     });
   } catch (error) {
     console.error("something wrong with auth middleware");
-    res.status(500).json({ msg: "Server Error" });
+    res.status(500).json({ status: "failed", message: "Server Error" });
   }
 };
 
-module.exports= auth;
-        
+module.exports = auth;

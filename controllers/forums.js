@@ -44,13 +44,6 @@ module.exports = {
   },
   deleteForum: async (req, res) => {
     try {
-      const user = await Users.findOne({role: "admin"})
-      if (!user){
-        return res.status(400).json({
-          status: "failed",
-          message: "Not Allowed"
-        })
-      }
       const forum = await forums.findByIdAndRemove(req.params.id);
       if (!forum) {
         return res
@@ -125,13 +118,6 @@ module.exports = {
 
   updateForum: async (req, res) => {
     try {
-      const user = await Users.findOne({role: "admin"})
-      if (!user){
-        return res.status(400).json({
-          status: "failed",
-          message: "Not Allowed"
-        })
-      }
       const { tittle, description } = req.body;
       if (!tittle) {
         return res.status(400).json({
