@@ -71,6 +71,7 @@ module.exports = {
       }
       const forum = await forums
         .find(query)
+        .sort({ publish_date: -1 })
         .populate("author", "name")
         .populate("chats.user", "name image")
         .exec();
@@ -118,39 +119,35 @@ module.exports = {
 
   updateForum: async (req, res) => {
     try {
-      const { tittle, description } = req.body;
-      if (!tittle) {
+      const { title, description } = req.body;
+      if (!title && !description && !req.files) {
         return res.status(400).json({
           status: "failed",
-          message: "Please add a tittle",
+          message: "Please update at least one data",
         });
       }
-      if (!description) {
-        return res.status(400).json({
-          status: "failed",
-          message: "Please add a description",
-        });
-      }
-      const _base64 = Buffer.from(req.files.image.data, "base64").toString(
-        "base64"
-      );
-      const base64 = `data:image/jpeg;base64,${_base64}`;
 
-      const cloudinaryResponse = await cloudinary.uploader.upload(base64, {
-        public_id: new Date().getTime(),
+      const dataForum = {
+        title,
+        description,
+      };
+
+      if (req.files) {
+        const _base64 = Buffer.from(req.files.image.data, "base64").toString(
+          "base64"
+        );
+        const base64 = `data:image/jpeg;base64,${_base64}`;
+
+        const cloudinaryResponse = await cloudinary.uploader.upload(base64, {
+          public_id: new Date().getTime(),
+        });
+
+        dataForum.image = cloudinaryResponse.secure_url;
+      }
+      const forum = await forums.findByIdAndUpdate(req.params.id, dataForum, {
+        new: true,
+        runValidators: true,
       });
-      let forum = await forums.findByIdAndUpdate(
-        req.params.id,
-        {
-          tittle: req.body.tittle,
-          description: req.body.description,
-          image: cloudinaryResponse.secure_url,
-        },
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
       if (!forum) {
         return res
           .status(404)
